@@ -10,6 +10,15 @@ int pic = 255 - analogRead(0)/2;
 #define DS_PIN 11              // пин датчика 
 #include "ds18b20minim.h"
 
+#include <TroykaIMU.h>
+// Создаём объект для работы с гироскопом
+Gyroscope gyroscope;
+// Создаём объект для работы с акселерометром
+Accelerometer accelerometer;
+// Создаём объект для работы с магнитометром/компасом
+Compass compass;
+// Создаём объект для работы с барометром
+Barometer barometer;
 
 //мотор-1 
 #define inA1 4   
@@ -34,6 +43,15 @@ void setup() {
   pinMode(pwm1, OUTPUT);   
    
   dallas_begin(DS_PIN);
+
+  // Инициализируем гироскоп
+  gyroscope.begin();
+  // Инициализируем акселерометр
+  accelerometer.begin();
+  // Инициализируем компас
+  compass.begin();
+  // Инициализируем барометр
+  barometer.begin();
 }
 
 // с ардуино на пк, терминтаор \n
@@ -55,6 +73,40 @@ void loop() {
     Serial.print(',');
     dallas_requestTemp(DS_PIN);
     Serial.println(dallas_getTemp(DS_PIN));
+  }
+  static uint32_t tmr2 = 0;
+  if (millis() - tmr2 > 100) {
+    tmr2 = millis();
+    Serial.print(1);
+    Serial.print(',');
+    Serial.print(gyroscope.readRotationDegX());
+    Serial.print(',');
+    Serial.print(gyroscope.readRotationDegY());
+    Serial.print(',');
+    Serial.print(gyroscope.readRotationDegZ());
+    Serial.print(',');
+    Serial.print(accelerometer.readAccelerationAX());
+    Serial.print(',');
+    Serial.print(accelerometer.readAccelerationAY());
+    Serial.print(',');
+    Serial.print(accelerometer.readAccelerationAZ());
+    Serial.print(',');
+    Serial.print(compass.readMagneticGaussX());
+    Serial.print(',');
+    Serial.print(compass.readMagneticGaussY());
+    Serial.print(',');
+    Serial.print(compass.readMagneticGaussZ());
+    Serial.println();
+  }
+    static uint32_t tmr3 = 0;
+  if (millis() - tmr3 > 100) {
+    tmr3 = millis();
+    Serial.print(2);
+    Serial.print(',');
+    Serial.print(barometer.readPressureMillimetersHg());
+    Serial.print(',');
+    Serial.print(barometer.readTemperatureC());
+    Serial.println();
   }
 }
 
