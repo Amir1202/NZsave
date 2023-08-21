@@ -2,6 +2,11 @@
 #define LED_G 45
 #define LED_B 46
 
+
+
+#include "microDS18B20.h"
+MicroDS18B20 <34> ds;
+
 // #define IN1 2
 // #define PWM1 3
 // #define IN2 4
@@ -27,15 +32,24 @@ void setup() {
   // pinMode(PWM1, 1);
   // pinMode(IN2, 1);
   // pinMode(PWM2, 1);
-  motorL.setMinDuty(110);
-  motorR.setMinDuty(110);
+  motorL.setMinDuty(110);                               //МинимальнаяСкоростьВращенияЛевогоМотора
+  motorR.setMinDuty(110);                               //МинимальнаяСкоростьВращенияПравогоМотора
+
 }
 
 void loop() {
   parsing();
   static uint32_t tmr = 0;
-  if (millis() - tmr > 100) {
+  if (millis() - tmr > 400) {
     tmr = millis();
+    Serial.print(0);
+    Serial.print(',');
+    ds.requestTemp();               //ЗапросТемпературы.
+    if (ds.readTemp()){             //Читаем, если прочитано - выводим.
+      Serial.println(ds.getTemp());
+    } else{
+      Serial.println(0);
+    }
   }
 }
 
@@ -54,31 +68,38 @@ void parsing() {
         analogWrite(LED_G, ints[2]);
         analogWrite(LED_B, ints[3]);
         break;
-      case 2:
+      case 2:                               //Вперёд
         motorL.setMode(FORWARD);
         motorL.setSpeed(255);
         motorR.setMode(FORWARD);
         motorR.setSpeed(255);
         break;
-      case 3:
+      case 3:                               //Назад
         motorL.setMode(BACKWARD);
         motorL.setSpeed(255);
         motorR.setMode(BACKWARD);
         motorR.setSpeed(255);
         break;
-      case 4:
+      case 4:                               //СТОП
         motorL.setMode(STOP);
         motorR.setMode(STOP);
         break;
       case 5:
-
+        motorL.setMode(FORWARD);            //Налево
+        motorL.setSpeed(255);
+        motorR.setMode(STOP);
         break;
       case 6:
-          motorL.setMode(AUTO);
-          motorL.setSpeed(ints[1]);
+        motorR.setMode(FORWARD);            //Направо
+        motorR.setSpeed(255);
+        motorL.setMode(STOP);
         break;
       case 7:
-          motorR.setMode(AUTO);
+          motorL.setMode(AUTO);            //ПлавноНАЛЕВО
+          motorL.setSpeed(ints[1]);
+        break;
+      case 8:
+          motorR.setMode(AUTO);            //ПлавноНАПРАВО
           motorR.setSpeed(ints[1]);
         break;
     }
