@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1027</width>
+    <height>652</height>
+   </rect>
+  </property>
+  <property name="cursor">
+   <cursorShape>ArrowCursor</cursorShape>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow{
+  background-color: #80829f; 
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QSlider" name="motorSL">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>470</y>
+      <width>51</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> QSlider::groove:vertical {
+     background: white;
+     position: absolute; /* абсолютная позиция в 4px слева и справа от виджета. установка полей виджета также будет работать... */
+     left: 10px; right: 10px;
+ }
+
+ QSlider::handle:vertical {
+     height: 10px;
+     background: black;
+     margin: 0 -6px; /* расширяется наружу от бороздки */
+ }
+
+ QSlider::add-page:vertical {
+     background: red;
+ }
+
+ QSlider::sub-page:vertical {
+     background: white;
+ }</string>
+    </property>
+    <property name="minimum">
+     <number>-255</number>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>233</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QComboBox" name="ComL"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="OpenB">
+       <property name="text">
+        <string>Open</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="CloseB">
+       <property name="text">
+        <string>Close</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QCheckBox" name="ledC">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Светодиод</string>
+    </property>
+    <property name="autoRepeatDelay">
+     <number>300</number>
+    </property>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>470</y>
+      <width>261</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="1" column="2">
+      <widget class="QRadioButton" name="right">
+       <property name="styleSheet">
+        <string notr="true">QRadioButton::indicator {
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(0,255,0); 
+}
+QRadioButton::indicator::checked{ 
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(255,0,0); 
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QRadioButton" name="back">
+       <property name="styleSheet">
+        <string notr="true">QRadioButton::indicator {
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(0,255,0); 
+}
+QRadioButton::indicator::checked{ 
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(255,0,0); 
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QRadioButton" name="stop">
+       <property name="styleSheet">
+        <string notr="true">QRadioButton::indicator {
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(0,255,0); 
+}
+QRadioButton::indicator::checked{ 
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(255,0,0); 
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QRadioButton" name="left">
+       <property name="styleSheet">
+        <string notr="true">QRadioButton::indicator {
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(0,255,0); 
+}
+QRadioButton::indicator::checked{ 
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(255,0,0); 
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QRadioButton" name="forw">
+       <property name="styleSheet">
+        <string notr="true">QRadioButton::indicator {
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(0,255,0); 
+}
+QRadioButton::indicator::checked{ 
+width: 26px;
+height: 26px;
+border-radius: 14px;
+border: 3.5px solid;
+background-color: rgb(255,0,0); 
+}
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLCDNumber" name="temperaturL">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>520</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLCDNumber{
+  background-color: rgb(0, 0, 0); 
+  border: 2px solid rgb(0, 20, 255);
+  border-width: 2px;
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+}</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="TextTemp">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>520</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+  background-color: rgb(0, 0, 0); 
+  border: 2px solid rgb(0, 20, 255);
+  border-width: 2px;
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+}</string>
+    </property>
+    <property name="midLineWidth">
+     <number>4</number>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::PlainText</enum>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdL">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>442</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLCDNumber" name="lcdR">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>442</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSlider" name="motorSR">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>470</y>
+      <width>51</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"> QSlider::groove:vertical {
+     background: white;
+     position: absolute; /* абсолютная позиция в 4px слева и справа от виджета. установка полей виджета также будет работать... */
+     left: 10px; right: 10px;
+ }
+
+ QSlider::handle:vertical {
+     height: 10px;
+     background: black;
+     margin: 0 -6px; /* расширяется наружу от бороздки */
+ }
+
+ QSlider::add-page:vertical {
+     background: red;
+ }
+
+ QSlider::sub-page:vertical {
+     background: white;
+ }</string>
+    </property>
+    <property name="minimum">
+     <number>-255</number>
+    </property>
+    <property name="maximum">
+     <number>255</number>
+    </property>
+    <property name="pageStep">
+     <number>10</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>70</y>
+      <width>841</width>
+      <height>321</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QOpenGLWidget" name="openGLWidget"/>
+     </item>
+     <item>
+      <widget class="QOpenGLWidget" name="openGLWidget_2"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLCDNumber" name="distanceL">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>560</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLCDNumber{
+  background-color: rgb(0, 0, 0); 
+  border: 2px solid rgb(0, 20, 255);
+  border-width: 2px;
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+}</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="TextDistance">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>560</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Arial Black</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel{
+  background-color: rgb(0, 0, 0); 
+  border: 2px solid rgb(0, 20, 255);
+  border-width: 2px;
+  border-radius: 10px;
+  color: rgb(255, 255, 255);
+}</string>
+    </property>
+    <property name="midLineWidth">
+     <number>4</number>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::PlainText</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>80</width>
+      <height>86</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QSlider" name="RS">
+       <property name="cursor">
+        <cursorShape>ArrowCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"> QSlider::groove:vertical {
+     background: white;
+     position: absolute; /* абсолютная позиция в 4px слева и справа от виджета. установка полей виджета также будет работать... */
+     left: 10px; right: 10px;
+ }
+
+ QSlider::handle:vertical {
+     height: 10px;
+     background: black;
+     margin: 0 -6px; /* расширяется наружу от бороздки */
+ }
+
+ QSlider::add-page:vertical {
+     background: red;
+ }
+
+ QSlider::sub-page:vertical {
+     background: white;
+ }</string>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="GS">
+       <property name="cursor">
+        <cursorShape>ArrowCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"> QSlider::groove:vertical {
+     background: white;
+     position: absolute; /* абсолютная позиция в 4px слева и справа от виджета. установка полей виджета также будет работать... */
+     left: 10px; right: 10px;
+ }
+
+ QSlider::handle:vertical {
+     height: 10px;
+     background: black;
+     margin: 0 -6px; /* расширяется наружу от бороздки */
+ }
+
+ QSlider::add-page:vertical {
+     background: green;
+ }
+
+ QSlider::sub-page:vertical {
+     background: white;
+ }</string>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="BS">
+       <property name="cursor">
+        <cursorShape>ArrowCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"> QSlider::groove:vertical {
+     background: white;
+     position: absolute; /* абсолютная позиция в 4px слева и справа от виджета. установка полей виджета также будет работать... */
+     left: 10px; right: 10px;
+ }
+
+ QSlider::handle:vertical {
+     height: 10px;
+     background: black;
+     margin: 0 -6px; /* расширяется наружу от бороздки */
+ }
+
+ QSlider::add-page:vertical {
+     background: blue;
+ }
+
+ QSlider::sub-page:vertical {
+     background: white;
+ }</string>
+       </property>
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="timeL">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>600</y>
+      <width>81</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
+   <zorder>layoutWidget</zorder>
+   <zorder>TextTemp</zorder>
+   <zorder>motorSL</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>ledC</zorder>
+   <zorder>gridLayoutWidget</zorder>
+   <zorder>temperaturL</zorder>
+   <zorder>lcdL</zorder>
+   <zorder>lcdR</zorder>
+   <zorder>motorSR</zorder>
+   <zorder>horizontalLayoutWidget</zorder>
+   <zorder>distanceL</zorder>
+   <zorder>TextDistance</zorder>
+   <zorder>timeL</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>motorSL</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>lcdL</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>626</x>
+     <y>513</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>630</x>
+     <y>454</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>motorSR</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>lcdR</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>682</x>
+     <y>499</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>680</x>
+     <y>460</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
