@@ -3,8 +3,8 @@
 AsyncStream<50> serial(&Serial, ';');  // указываем обработчик и стоп символ
 
 
-#define LED_R 9
-#define LED_G 6
+#define LED_R 6
+#define LED_G 9
 #define LED_B 11
 
 //Для датчика температуры - используется "DIGITAL" пин 34
@@ -32,6 +32,10 @@ void loop() {
   if (millis() - tmr > 1000) {
     tmr = millis();
     Serial.print(0);
+    Serial.print(',');
+    ds.requestTemp();  //ЗапросТемпературы.
+    ds.readTemp();     //Читаем, если прочитано - выводим.
+    Serial.print(ds.getTemp());
     Serial.print(',');
     Serial.println("1000");
   }
