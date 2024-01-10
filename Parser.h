@@ -1,6 +1,6 @@
 #ifndef Parser_h
 #define Parser_h
-// простой и быстрый парсер строк в отдельные строки и числа
+// ������� � ������� ������ ����� � ��������� ������ � �����
 
 class Parser {
   public:
@@ -16,19 +16,19 @@ class Parser {
     }
     int amount() {
       int i = 0, count = 0;
-      while (buf[i++]) if (buf[i] == div) count++;  // подсчёт разделителей
+      while (buf[i++]) if (buf[i] == div) count++;  // ������� ������������
       return ++count;
     }
     int split() {
-      int am = amount();            // количество данных
-      clear();                      // освобождаем буфер
-      str = (char**)malloc(am * sizeof(char*)); // создаём буфер
-      str[0] = buf;                 // строка 0
-      int i = 0, j = 0;             // счётчики
-      while (buf[i]) {              // пока не NULL
-        if (buf[i] == div) {        // если разделитель
-          buf[i] = '\0';            // меняем на NULL
-          str[++j] = buf + i + 1;   // запоминаем начало строки
+      int am = amount();            // ���������� ������
+      clear();                      // ����������� �����
+      str = (char**)malloc(am * sizeof(char*)); // ������ �����
+      str[0] = buf;                 // ������ 0
+      int i = 0, j = 0;             // ��������
+      while (buf[i]) {              // ���� �� NULL
+        if (buf[i] == div) {        // ���� �����������
+          buf[i] = '\0';            // ������ �� NULL
+          str[++j] = buf + i + 1;   // ���������� ������ ������
         }
         i++;
       }
