@@ -1,0 +1,1322 @@
+# import sys
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import cv2
+# from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
+# from PyQt5 import QtWidgets, uic
+#
+# class MainWindow(QWidget):
+#     def __init__(self):
+#         super(MainWindow, self).__init__()
+#         self.setWindowTitle("GOODNESS")
+#         self.VBL = QGridLayout()
+#
+#         self.FeedLabel = QLabel()
+#
+#         # self.VBL.addWidget(self.FeedLabel)
+#
+#         self.Worker1 = Worker1()
+#         self.Worker1.start()
+#         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
+#
+#         # self.setLayout(self.VBL)
+#
+#         def ImageUpdateSlot(self, Image):
+#             self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+#
+#         # self.serial = QSerialPort()
+#         # self.serial.setBaudRate(115200)
+#         #
+#         # portList = []
+#         # ports = QSerialPortInfo().availablePorts()
+#         # for port in ports:
+#         #     portList.append(port.portName())
+#         # self.comL = QComboBox()
+#         # self.comL.addItems(portList)
+#         # self.VBL.addWidget(self.comL)
+#         #
+#         #
+#         # self.resetB = QPushButton("Reset")
+#         # self.VBL.addWidget(self.resetB)
+#         # self.resetB.clicked.connect(self.onReset)
+#         #
+#         # self.openB = QPushButton("Open")
+#         # self.VBL.addWidget(self.openB)
+#         # self.openB.clicked.connect(self.onOpen)
+#         #
+#         # self.closeB = QPushButton("Close")
+#         # self.VBL.addWidget(self.closeB)
+#         # self.closeB.clicked.connect(self.onClose)
+#         #
+#         # self.temperaturL01 = QLCDNumber()
+#         # self.VBL.addWidget(self.temperaturL01)
+#         #
+#         # self.temperaturL02 = QLCDNumber()
+#         # self.VBL.addWidget(self.temperaturL02)
+#         #
+#         # self.ledC = QCheckBox("LED Control")
+#         # self.VBL.addWidget(self.ledC)
+#         # self.ledC.stateChanged.connect(self.ledControl)
+#         #
+#         # self.speedSlider = QSlider(Qt.Horizontal)
+#         # self.speedSlider.setStyleSheet(
+#         #     "QSlider::groove:horizontal { background: white; position: absolute;  left: 10px; right: 10px;}"
+#         #     "QSlider::handle:horizontal {height: 10px; background: black;margin: 0 -10px;}"
+#         #     "QSlider::add-page:horizontal { background: white;}"
+#         #     "QSlider::sub-page:horizontal {background: red;}")
+#         # self.speedSlider.setRange(1, 180)       # Устанавливаем диапазон значений от 0 до 180
+#         # self.speedSlider.setValue(90)            # Устанавливаем начальное значение
+#         # self.VBL.addWidget(self.speedSlider)
+#         # self.speedSlider.valueChanged.connect(self.Speed)
+#         #
+#         # self.servoSlider = QSlider(Qt.Horizontal)
+#         # self.servoSlider.setStyleSheet(
+#         #     "QSlider::groove:horizontal { background: white; position: absolute;  left: 10px; right: 10px;}"
+#         #     "QSlider::handle:horizontal {height: 10px; background: black;margin: 0 -10px;}"
+#         #     "QSlider::add-page:horizontal { background: white;}"
+#         #     "QSlider::sub-page:horizontal {background: white;}")
+#         # self.servoSlider.setRange(1360, 1600)       # Устанавливаем диапазон значений от 90 до 180
+#         # self.servoSlider.setValue(1450)            # Устанавливаем начальное значение
+#         # self.VBL.addWidget(self.servoSlider)
+#         # self.servoSlider.valueChanged.connect(self.Servo)
+#
+#     def ImageUpdateSlot(self, Image):
+#         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+#     # def onReset(self):
+#     #     portlist = []
+#     #     ports = QSerialPortInfo().availablePorts()
+#     #     for port in ports:
+#     #         portlist.append(port.portName())
+#     #         self.comL.clear()
+#     #         self.comL.addItems(portlist)
+#     # def onOpen(self):
+#     #     self.serial.setPortName(self.comL.currentText())
+#     #     self.serial.open(QIODevice.ReadWrite)
+#     # def onClose(self):
+#     #     self.serial.close()
+#     # def onRead(self):
+#     #     if not self.serial.canReadLine():
+#     #         return
+#     #     rx = self.serial.readLine()
+#     #     rxs = str(rx, 'utf-8').strip()
+#     #     data = rxs.split(',')
+#     #     if data[0] == '0':
+#     #         self.temperaturL01.display(data[1])
+#     #         self.temperaturL02.display(data[2])
+#     # def serialSend(self, data):
+#     #     txs = ""
+#     #     for val in data:
+#     #         txs += str(val)
+#     #         txs += ','
+#     #     txs = txs[:-1]
+#     #     txs += ';'
+#     #     self.serial.write(txs.encode())
+#     # def ledControl(self, val):
+#     #     if val == 2: val = 1;
+#     #     self.serialSend([0, val])
+#     # def Speed(self, val):
+#     #     self.serialSend([1, self.speedSlider.value()])
+#     #     print(val)
+#     # def Servo(self, val):
+#     #     self.serialSend([2, self.servoSlider.value()])
+#     #     print(val)
+# class Worker1(QThread):
+#     ImageUpdate = pyqtSignal(QImage)
+#     def run(self):
+#         self.ThreadActive = True
+#         Capture = cv2.VideoCapture(0)
+#         while self.ThreadActive:
+#             ret, frame = Capture.read()
+#             if ret:
+#                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#                 FlippedImage = cv2.flip(Image, 1)
+#                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+#                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+#                 self.ImageUpdate.emit(Pic)
+#     def stop(self):
+#         self.ThreadActive = False
+#         self.quit()
+#
+# if __name__ == "__main__":
+#     App = QApplication(sys.argv)
+#     Root = MainWindow()
+#     Root.setWindowState(Qt.WindowMaximized)  #Полный Экран
+#     Root.show()
+#     sys.exit(App.exec())
+# #
+#
+#
+#
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
+# from PyQt5 import QtWidgets, uic
+# from PyQt5.QtCore import QIODevice
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import sys
+# import cv2
+#
+# app = QtWidgets.QApplication([])
+# ui = uic.loadUi("QTdes.ui")
+#
+# serial = QSerialPort()
+# serial.setBaudRate(115200)
+#
+# portList = []
+# ports = QSerialPortInfo().availablePorts()
+# for port in ports:
+#     portList.append(port.portName())
+# ui.comL.clear()
+# ui.comL.addItems(portList)
+#
+# def onReset():
+#     portlist = []
+#     ports = QSerialPortInfo().availablePorts()
+#     for port in ports:
+#         portlist.append(port.portName())
+#         ui.comL.clear()
+#         ui.comL.addItems(portlist)
+# ui.resetB.clicked.connect(onReset)
+# def onOpen():
+#     serial.setPortName(ui.comL.currentText())
+#     serial.open(QIODevice.ReadWrite)
+# ui.openB.clicked.connect(onOpen)
+#
+# def onClose():
+#     serial.close()
+# ui.closeB.clicked.connect(onClose)
+#
+# def onRead():
+#     if not serial.canReadLine(): return
+#     rx = serial.readLine()
+#     rxs = str(rx, 'utf-8').strip()
+#     data = rxs.split(',')
+#     if data[0] == '0':
+#         ui.temperaturL01.display(data[1])
+#         ui.temperaturL02.display(data[2])
+# serial.readyRead.connect(onRead)
+#
+# def serialSend(data):
+#     txs = ""
+#     for val in data:
+#         txs += str(val)
+#         txs += ','
+#     txs = txs[:-1]
+#     txs += ';'
+#     serial.write(txs.encode())
+# def ledControl(val):
+#     if val == 2: val = 1;
+#     serialSend([0, val])
+# ui.ledC.stateChanged.connect(ledControl)
+# def Speed(val):
+#     serialSend([1, ui.speedSlider.value()])
+# ui.speedSlider.valueChanged.connect(Speed)
+# def Servo(val):
+#     serialSend([2, ui.servoSlider.value()])
+# ui.servoSlider.valueChanged.connect(Servo)
+#
+# ui.show()
+# app.exec()
+#
+# import sys
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import cv2
+#
+# class MainWindow(QWidget):
+#     def __init__(self):
+#         super(MainWindow, self).__init__()
+#
+#         self.VBL = QVBoxLayout()
+#         self.FeedLabel = QLabel()
+#         self.VBL.addWidget(self.FeedLabel)
+#
+#         self.Worker1 = Worker1()
+#         self.Worker1.start()
+#         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
+#         self.setLayout(self.VBL)
+#     def ImageUpdateSlot(self, Image):
+#         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+# class Worker1(QThread):
+#     ImageUpdate = pyqtSignal(QImage)
+#     def run(self):
+#         self.ThreadActive = True
+#         Capture = cv2.VideoCapture(0)
+#         while self.ThreadActive:
+#             ret, frame = Capture.read()
+#             if ret:
+#                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#                 FlippedImage = cv2.flip(Image, 1)
+#                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+#                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+#                 self.ImageUpdate.emit(Pic)
+#
+#     def stop(self):
+#         self.ThreadActive = False
+#         self.quit()
+#
+# if __name__ == "__main__":
+#     App = QApplication(sys.argv)
+#     Root = MainWindow()
+#     Root.show()
+#     sys.exit(App.exec())
+#
+
+
+
+
+
+
+
+# import sys
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import cv2
+# from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
+# from PyQt5 import QtWidgets, uic
+#
+# class MainWindow(QWidget):
+#     def __init__(self):
+#         super(MainWindow, self).__init__()
+#         self.setWindowTitle("GOODNESS")
+#         self.VBL = QGridLayout()
+#
+#         self.FeedLabel = QLabel()
+#
+#         # self.VBL.addWidget(self.FeedLabel)
+#
+#         self.Worker1 = Worker1()
+#         self.Worker1.start()
+#         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
+#
+#         # self.setLayout(self.VBL)
+#
+#         def ImageUpdateSlot(self, Image):
+#             self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+#
+#         # self.serial = QSerialPort()
+#         # self.serial.setBaudRate(115200)
+#         #
+#         # portList = []
+#         # ports = QSerialPortInfo().availablePorts()
+#         # for port in ports:
+#         #     portList.append(port.portName())
+#         # self.comL = QComboBox()
+#         # self.comL.addItems(portList)
+#         # self.VBL.addWidget(self.comL)
+#         #
+#         #
+#         # self.resetB = QPushButton("Reset")
+#         # self.VBL.addWidget(self.resetB)
+#         # self.resetB.clicked.connect(self.onReset)
+#         #
+#         # self.openB = QPushButton("Open")
+#         # self.VBL.addWidget(self.openB)
+#         # self.openB.clicked.connect(self.onOpen)
+#         #
+#         # self.closeB = QPushButton("Close")
+#         # self.VBL.addWidget(self.closeB)
+#         # self.closeB.clicked.connect(self.onClose)
+#         #
+#         # self.temperaturL01 = QLCDNumber()
+#         # self.VBL.addWidget(self.temperaturL01)
+#         #
+#         # self.temperaturL02 = QLCDNumber()
+#         # self.VBL.addWidget(self.temperaturL02)
+#         #
+#         # self.ledC = QCheckBox("LED Control")
+#         # self.VBL.addWidget(self.ledC)
+#         # self.ledC.stateChanged.connect(self.ledControl)
+#         #
+#         # self.speedSlider = QSlider(Qt.Horizontal)
+#         # self.speedSlider.setStyleSheet(
+#         #     "QSlider::groove:horizontal { background: white; position: absolute;  left: 10px; right: 10px;}"
+#         #     "QSlider::handle:horizontal {height: 10px; background: black;margin: 0 -10px;}"
+#         #     "QSlider::add-page:horizontal { background: white;}"
+#         #     "QSlider::sub-page:horizontal {background: red;}")
+#         # self.speedSlider.setRange(1, 180)       # Устанавливаем диапазон значений от 0 до 180
+#         # self.speedSlider.setValue(90)            # Устанавливаем начальное значение
+#         # self.VBL.addWidget(self.speedSlider)
+#         # self.speedSlider.valueChanged.connect(self.Speed)
+#         #
+#         # self.servoSlider = QSlider(Qt.Horizontal)
+#         # self.servoSlider.setStyleSheet(
+#         #     "QSlider::groove:horizontal { background: white; position: absolute;  left: 10px; right: 10px;}"
+#         #     "QSlider::handle:horizontal {height: 10px; background: black;margin: 0 -10px;}"
+#         #     "QSlider::add-page:horizontal { background: white;}"
+#         #     "QSlider::sub-page:horizontal {background: white;}")
+#         # self.servoSlider.setRange(1360, 1600)       # Устанавливаем диапазон значений от 90 до 180
+#         # self.servoSlider.setValue(1450)            # Устанавливаем начальное значение
+#         # self.VBL.addWidget(self.servoSlider)
+#         # self.servoSlider.valueChanged.connect(self.Servo)
+#
+#     def ImageUpdateSlot(self, Image):
+#         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+#     # def onReset(self):
+#     #     portlist = []
+#     #     ports = QSerialPortInfo().availablePorts()
+#     #     for port in ports:
+#     #         portlist.append(port.portName())
+#     #         self.comL.clear()
+#     #         self.comL.addItems(portlist)
+#     # def onOpen(self):
+#     #     self.serial.setPortName(self.comL.currentText())
+#     #     self.serial.open(QIODevice.ReadWrite)
+#     # def onClose(self):
+#     #     self.serial.close()
+#     # def onRead(self):
+#     #     if not self.serial.canReadLine():
+#     #         return
+#     #     rx = self.serial.readLine()
+#     #     rxs = str(rx, 'utf-8').strip()
+#     #     data = rxs.split(',')
+#     #     if data[0] == '0':
+#     #         self.temperaturL01.display(data[1])
+#     #         self.temperaturL02.display(data[2])
+#     # def serialSend(self, data):
+#     #     txs = ""
+#     #     for val in data:
+#     #         txs += str(val)
+#     #         txs += ','
+#     #     txs = txs[:-1]
+#     #     txs += ';'
+#     #     self.serial.write(txs.encode())
+#     # def ledControl(self, val):
+#     #     if val == 2: val = 1;
+#     #     self.serialSend([0, val])
+#     # def Speed(self, val):
+#     #     self.serialSend([1, self.speedSlider.value()])
+#     #     print(val)
+#     # def Servo(self, val):
+#     #     self.serialSend([2, self.servoSlider.value()])
+#     #     print(val)
+# class Worker1(QThread):
+#     ImageUpdate = pyqtSignal(QImage)
+#     def run(self):
+#         self.ThreadActive = True
+#         Capture = cv2.VideoCapture(0)
+#         while self.ThreadActive:
+#             ret, frame = Capture.read()
+#             if ret:
+#                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#                 FlippedImage = cv2.flip(Image, 1)
+#                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+#                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+#                 self.ImageUpdate.emit(Pic)
+#     def stop(self):
+#         self.ThreadActive = False
+#         self.quit()
+#
+# if __name__ == "__main__":
+#     App = QApplication(sys.argv)
+#     Root = MainWindow()
+#     Root.setWindowState(Qt.WindowMaximized)  #Полный Экран
+#     Root.show()
+#     sys.exit(App.exec())
+# #
+#
+#
+#
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
+# from PyQt5 import QtWidgets, uic
+# from PyQt5.QtCore import QIODevice
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import sys
+# import cv2
+#
+# app = QtWidgets.QApplication([])
+# ui = uic.loadUi("QTdes.ui")
+#
+# serial = QSerialPort()
+# serial.setBaudRate(115200)
+#
+# portList = []
+# ports = QSerialPortInfo().availablePorts()
+# for port in ports:
+#     portList.append(port.portName())
+# ui.comL.clear()
+# ui.comL.addItems(portList)
+#
+# def onReset():
+#     portlist = []
+#     ports = QSerialPortInfo().availablePorts()
+#     for port in ports:
+#         portlist.append(port.portName())
+#         ui.comL.clear()
+#         ui.comL.addItems(portlist)
+# ui.resetB.clicked.connect(onReset)
+# def onOpen():
+#     serial.setPortName(ui.comL.currentText())
+#     serial.open(QIODevice.ReadWrite)
+# ui.openB.clicked.connect(onOpen)
+#
+# def onClose():
+#     serial.close()
+# ui.closeB.clicked.connect(onClose)
+#
+# def onRead():
+#     if not serial.canReadLine(): return
+#     rx = serial.readLine()
+#     rxs = str(rx, 'utf-8').strip()
+#     data = rxs.split(',')
+#     if data[0] == '0':
+#         ui.temperaturL01.display(data[1])
+#         ui.temperaturL02.display(data[2])
+# serial.readyRead.connect(onRead)
+#
+# def serialSend(data):
+#     txs = ""
+#     for val in data:
+#         txs += str(val)
+#         txs += ','
+#     txs = txs[:-1]
+#     txs += ';'
+#     serial.write(txs.encode())
+# def ledControl(val):
+#     if val == 2: val = 1;
+#     serialSend([0, val])
+# ui.ledC.stateChanged.connect(ledControl)
+# def Speed(val):
+#     serialSend([1, ui.speedSlider.value()])
+# ui.speedSlider.valueChanged.connect(Speed)
+# def Servo(val):
+#     serialSend([2, ui.servoSlider.value()])
+# ui.servoSlider.valueChanged.connect(Servo)
+#
+# ui.show()
+# app.exec()
+#
+# import sys
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import cv2
+#
+# class MainWindow(QWidget):
+#     def __init__(self):
+#         super(MainWindow, self).__init__()
+#
+#         self.VBL = QVBoxLayout()
+#         self.FeedLabel = QLabel()
+#         self.VBL.addWidget(self.FeedLabel)
+#
+#         self.Worker1 = Worker1()
+#         self.Worker1.start()
+#         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
+#         self.setLayout(self.VBL)
+#     def ImageUpdateSlot(self, Image):
+#         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+# class Worker1(QThread):
+#     ImageUpdate = pyqtSignal(QImage)
+#     def run(self):
+#         self.ThreadActive = True
+#         Capture = cv2.VideoCapture(0)
+#         while self.ThreadActive:
+#             ret, frame = Capture.read()
+#             if ret:
+#                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#                 FlippedImage = cv2.flip(Image, 1)
+#                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+#                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+#                 self.ImageUpdate.emit(Pic)
+#
+#     def stop(self):
+#         self.ThreadActive = False
+#         self.quit()
+#
+# if __name__ == "__main__":
+#     App = QApplication(sys.argv)
+#     Root = MainWindow()
+#     Root.show()
+#     sys.exit(App.exec())
+#
+
+#______
+
+# import sys
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import cv2
+# from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
+# from PyQt5 import QtWidgets, uic
+#
+# class MainWindow(QWidget):
+#     def __init__(self):
+#         super(MainWindow, self).__init__()
+#         self.setWindowTitle("GOODNESS")
+#         self.VBL = QGridLayout()
+#
+#         self.FeedLabel = QLabel()
+#
+#         # self.VBL.addWidget(self.FeedLabel)
+#
+#         self.Worker1 = Worker1()
+#         self.Worker1.start()
+#         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
+#
+#         # self.setLayout(self.VBL)
+#
+#         def ImageUpdateSlot(self, Image):
+#             self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+#
+#         # self.serial = QSerialPort()
+#         # self.serial.setBaudRate(115200)
+#         #
+#         # portList = []
+#         # ports = QSerialPortInfo().availablePorts()
+#         # for port in ports:
+#         #     portList.append(port.portName())
+#         # self.comL = QComboBox()
+#         # self.comL.addItems(portList)
+#         # self.VBL.addWidget(self.comL)
+#         #
+#         #
+#         # self.resetB = QPushButton("Reset")
+#         # self.VBL.addWidget(self.resetB)
+#         # self.resetB.clicked.connect(self.onReset)
+#         #
+#         # self.openB = QPushButton("Open")
+#         # self.VBL.addWidget(self.openB)
+#         # self.openB.clicked.connect(self.onOpen)
+#         #
+#         # self.closeB = QPushButton("Close")
+#         # self.VBL.addWidget(self.closeB)
+#         # self.closeB.clicked.connect(self.onClose)
+#         #
+#         # self.temperaturL01 = QLCDNumber()
+#         # self.VBL.addWidget(self.temperaturL01)
+#         #
+#         # self.temperaturL02 = QLCDNumber()
+#         # self.VBL.addWidget(self.temperaturL02)
+#         #
+#         # self.ledC = QCheckBox("LED Control")
+#         # self.VBL.addWidget(self.ledC)
+#         # self.ledC.stateChanged.connect(self.ledControl)
+#         #
+#         # self.speedSlider = QSlider(Qt.Horizontal)
+#         # self.speedSlider.setStyleSheet(
+#         #     "QSlider::groove:horizontal { background: white; position: absolute;  left: 10px; right: 10px;}"
+#         #     "QSlider::handle:horizontal {height: 10px; background: black;margin: 0 -10px;}"
+#         #     "QSlider::add-page:horizontal { background: white;}"
+#         #     "QSlider::sub-page:horizontal {background: red;}")
+#         # self.speedSlider.setRange(1, 180)       # Устанавливаем диапазон значений от 0 до 180
+#         # self.speedSlider.setValue(90)            # Устанавливаем начальное значение
+#         # self.VBL.addWidget(self.speedSlider)
+#         # self.speedSlider.valueChanged.connect(self.Speed)
+#         #
+#         # self.servoSlider = QSlider(Qt.Horizontal)
+#         # self.servoSlider.setStyleSheet(
+#         #     "QSlider::groove:horizontal { background: white; position: absolute;  left: 10px; right: 10px;}"
+#         #     "QSlider::handle:horizontal {height: 10px; background: black;margin: 0 -10px;}"
+#         #     "QSlider::add-page:horizontal { background: white;}"
+#         #     "QSlider::sub-page:horizontal {background: white;}")
+#         # self.servoSlider.setRange(1360, 1600)       # Устанавливаем диапазон значений от 90 до 180
+#         # self.servoSlider.setValue(1450)            # Устанавливаем начальное значение
+#         # self.VBL.addWidget(self.servoSlider)
+#         # self.servoSlider.valueChanged.connect(self.Servo)
+#
+#     def ImageUpdateSlot(self, Image):
+#         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+#     # def onReset(self):
+#     #     portlist = []
+#     #     ports = QSerialPortInfo().availablePorts()
+#     #     for port in ports:
+#     #         portlist.append(port.portName())
+#     #         self.comL.clear()
+#     #         self.comL.addItems(portlist)
+#     # def onOpen(self):
+#     #     self.serial.setPortName(self.comL.currentText())
+#     #     self.serial.open(QIODevice.ReadWrite)
+#     # def onClose(self):
+#     #     self.serial.close()
+#     # def onRead(self):
+#     #     if not self.serial.canReadLine():
+#     #         return
+#     #     rx = self.serial.readLine()
+#     #     rxs = str(rx, 'utf-8').strip()
+#     #     data = rxs.split(',')
+#     #     if data[0] == '0':
+#     #         self.temperaturL01.display(data[1])
+#     #         self.temperaturL02.display(data[2])
+#     # def serialSend(self, data):
+#     #     txs = ""
+#     #     for val in data:
+#     #         txs += str(val)
+#     #         txs += ','
+#     #     txs = txs[:-1]
+#     #     txs += ';'
+#     #     self.serial.write(txs.encode())
+#     # def ledControl(self, val):
+#     #     if val == 2: val = 1;
+#     #     self.serialSend([0, val])
+#     # def Speed(self, val):
+#     #     self.serialSend([1, self.speedSlider.value()])
+#     #     print(val)
+#     # def Servo(self, val):
+#     #     self.serialSend([2, self.servoSlider.value()])
+#     #     print(val)
+# class Worker1(QThread):
+#     ImageUpdate = pyqtSignal(QImage)
+#     def run(self):
+#         self.ThreadActive = True
+#         Capture = cv2.VideoCapture(0)
+#         while self.ThreadActive:
+#             ret, frame = Capture.read()
+#             if ret:
+#                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#                 FlippedImage = cv2.flip(Image, 1)
+#                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+#                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+#                 self.ImageUpdate.emit(Pic)
+#     def stop(self):
+#         self.ThreadActive = False
+#         self.quit()
+#
+# if __name__ == "__main__":
+#     App = QApplication(sys.argv)
+#     Root = MainWindow()
+#     Root.setWindowState(Qt.WindowMaximized)  #Полный Экран
+#     Root.show()
+#     sys.exit(App.exec())
+# #
+#
+#
+#
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
+# from PyQt5 import QtWidgets, uic
+# from PyQt5.QtCore import QIODevice
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import sys
+# import cv2
+#
+# app = QtWidgets.QApplication([])
+# ui = uic.loadUi("QTdes.ui")
+#
+# serial = QSerialPort()
+# serial.setBaudRate(115200)
+#
+# portList = []
+# ports = QSerialPortInfo().availablePorts()
+# for port in ports:
+#     portList.append(port.portName())
+# ui.comL.clear()
+# ui.comL.addItems(portList)
+#
+# def onReset():
+#     portlist = []
+#     ports = QSerialPortInfo().availablePorts()
+#     for port in ports:
+#         portlist.append(port.portName())
+#         ui.comL.clear()
+#         ui.comL.addItems(portlist)
+# ui.resetB.clicked.connect(onReset)
+# def onOpen():
+#     serial.setPortName(ui.comL.currentText())
+#     serial.open(QIODevice.ReadWrite)
+# ui.openB.clicked.connect(onOpen)
+#
+# def onClose():
+#     serial.close()
+# ui.closeB.clicked.connect(onClose)
+#
+# def onRead():
+#     if not serial.canReadLine(): return
+#     rx = serial.readLine()
+#     rxs = str(rx, 'utf-8').strip()
+#     data = rxs.split(',')
+#     if data[0] == '0':
+#         ui.temperaturL01.display(data[1])
+#         ui.temperaturL02.display(data[2])
+# serial.readyRead.connect(onRead)
+#
+# def serialSend(data):
+#     txs = ""
+#     for val in data:
+#         txs += str(val)
+#         txs += ','
+#     txs = txs[:-1]
+#     txs += ';'
+#     serial.write(txs.encode())
+# def ledControl(val):
+#     if val == 2: val = 1;
+#     serialSend([0, val])
+# ui.ledC.stateChanged.connect(ledControl)
+# def Speed(val):
+#     serialSend([1, ui.speedSlider.value()])
+# ui.speedSlider.valueChanged.connect(Speed)
+# def Servo(val):
+#     serialSend([2, ui.servoSlider.value()])
+# ui.servoSlider.valueChanged.connect(Servo)
+#
+# ui.show()
+# app.exec()
+#
+# import sys
+# from PyQt5.QtGui import *
+# from PyQt5.QtWidgets import *
+# from PyQt5.QtCore import *
+# import cv2
+#
+# class MainWindow(QWidget):
+#     def __init__(self):
+#         super(MainWindow, self).__init__()
+#
+#         self.VBL = QVBoxLayout()
+#         self.FeedLabel = QLabel()
+#         self.VBL.addWidget(self.FeedLabel)
+#
+#         self.Worker1 = Worker1()
+#         self.Worker1.start()
+#         self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
+#         self.setLayout(self.VBL)
+#     def ImageUpdateSlot(self, Image):
+#         self.FeedLabel.setPixmap(QPixmap.fromImage(Image))
+# class Worker1(QThread):
+#     ImageUpdate = pyqtSignal(QImage)
+#     def run(self):
+#         self.ThreadActive = True
+#         Capture = cv2.VideoCapture(0)
+#         while self.ThreadActive:
+#             ret, frame = Capture.read()
+#             if ret:
+#                 Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#                 FlippedImage = cv2.flip(Image, 1)
+#                 ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+#                 Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+#                 self.ImageUpdate.emit(Pic)
+#
+#     def stop(self):
+#         self.ThreadActive = False
+#         self.quit()
+#
+# if __name__ == "__main__":
+#     App = QApplication(sys.argv)
+#     Root = MainWindow()
+#     Root.show()
+#     sys.exit(App.exec())
+#
+
+
+
+
+
+
+
+
+#--------------
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'C:\Users\amire\PycharmProjects\QTARDPYT\QTdes.ui'
+#
+# Created by: PyQt5 UI code generator 5.15.9
+#
+# WARNING: Any manual changes made to this file will be lost when pyuic5 is
+# run again.  Do not edit this file unless you know what you are doing.
+
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+import cv2
+from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(976, 646)
+        MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        MainWindow.setStyleSheet("QMainWindow{\n"
+"background-color:#455364;\n"
+"}")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+
+
+
+
+
+        self.speedSlider = QtWidgets.QSlider(self.centralwidget)
+        self.speedSlider.setGeometry(QtCore.QRect(560, 550, 371, 51))
+        self.speedSlider.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.speedSlider.setStyleSheet("\n"
+"QSlider::groove:horizontal { background: white; position: absolute;  left: 10px; right: 10px;}\n"
+"QSlider::handle:horizontal {height: 10px; background: black;margin: 0 -10px; }\n"
+"QSlider::add-page:horizontal { background: white;}\n"
+"QSlider::sub-page:horizontal {background: red;}")
+        self.speedSlider.setMinimum(800)
+        self.speedSlider.setMaximum(2300)
+        self.speedSlider.setProperty("value", 1550)
+        self.speedSlider.setSliderPosition(1550)
+        self.speedSlider.setTracking(True)
+        self.speedSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.speedSlider.setObjectName("speedSlider")
+        self.speedSlider.valueChanged.connect(self.defSpeed)
+
+
+        self.lcdSPEED = QtWidgets.QLCDNumber(self.centralwidget)
+        self.lcdSPEED.setGeometry(QtCore.QRect(930, 550, 81, 51))
+        self.lcdSPEED.setObjectName("lcdSPEED")
+
+        self.servoSlider = QtWidgets.QSlider(self.centralwidget)
+        self.servoSlider.setGeometry(QtCore.QRect(20, 550, 301, 51))
+        self.servoSlider.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.servoSlider.setStyleSheet("\n"
+"QSlider::groove:horizontal {background: white; position: absolute; left: 10px; right: 10px;}\n"
+"QSlider::handle:horizontal {height: 10px; background: black; margin: 0 -10px; /* расширяется наружу от бороздки */ }\n"
+"QSlider::add-page:horizontal {background: white;}\n"
+"QSlider::sub-page:horizontal {background: white;}")
+        self.servoSlider.setMinimum(0)
+        self.servoSlider.setMaximum(180)
+        self.servoSlider.setProperty("value", 90)
+        self.servoSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.servoSlider.setObjectName("servoSlider")
+        self.servoSlider.valueChanged.connect(self.defServo)
+
+
+        self.temperaturL01 = QtWidgets.QLCDNumber(self.centralwidget)
+        self.temperaturL01.setGeometry(QtCore.QRect(10, 180, 211, 101))
+        self.temperaturL01.setStyleSheet("\n"
+"QLCDNumber{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.0284091 rgba(255, 0, 79, 255), stop:1 rgba(255, 124, 55, 252)); color: rgb(255, 255, 255);}")
+        self.temperaturL01.setObjectName("temperaturL01")
+
+        self.ledC = QtWidgets.QCheckBox(self.centralwidget)
+        self.ledC.setGeometry(QtCore.QRect(10, 380, 71, 41))
+        self.ledC.setObjectName("ledC")
+        self.ledC.stateChanged.connect(self.ledControl)
+
+        self.temperaturL02 = QtWidgets.QLCDNumber(self.centralwidget)
+        self.temperaturL02.setGeometry(QtCore.QRect(10, 280, 211, 101))
+        self.temperaturL02.setStyleSheet("\n"
+"QLCDNumber{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.0284091 rgba(255, 0, 79, 255), stop:1 rgba(255, 124, 55, 252)); color: rgb(255, 255, 255);}")
+        self.temperaturL02.setObjectName("temperaturL02")
+
+        self.lcdSPEED_2 = QtWidgets.QLCDNumber(self.centralwidget)
+        self.lcdSPEED_2.setGeometry(QtCore.QRect(350, 550, 81, 51))
+        self.lcdSPEED_2.setObjectName("lcdSPEED_2")
+
+        self.openB = QtWidgets.QPushButton(self.centralwidget)
+        self.openB.setGeometry(QtCore.QRect(10, 80, 101, 41))
+        self.openB.setObjectName("openB")
+        self.openB.clicked.connect(self.onOpen)
+
+        self.closeB = QtWidgets.QPushButton(self.centralwidget)
+        self.closeB.setGeometry(QtCore.QRect(110, 80, 81, 41))
+        self.closeB.setObjectName("closeB")
+        self.closeB.clicked.connect(self.onClose)
+
+
+
+
+        self.serial = QSerialPort()
+        self.serial.setBaudRate(115200)
+        portList = []
+        ports = QSerialPortInfo().availablePorts()
+        for port in ports:
+            portList.append(port.portName())
+
+        self.comL = QtWidgets.QComboBox(self.centralwidget)
+        self.comL.setGeometry(QtCore.QRect(10, 10, 181, 61))
+        self.comL.setObjectName("comL")
+        self.comL.addItems(portList)
+
+
+        self.resetB = QtWidgets.QPushButton(self.centralwidget)
+        self.resetB.setGeometry(QtCore.QRect(10, 130, 181, 41))
+        self.resetB.setObjectName("resetB")
+        self.resetB.clicked.connect(self.onReset)
+
+        self.QTcamera = QtWidgets.QLabel(self.centralwidget)
+        self.QTcamera.setGeometry(QtCore.QRect(230, 20, 721, 501))
+        self.QTcamera.setObjectName("QTcamera")
+
+        self.Worker1 = Worker1()
+        self.Worker1.start()
+        self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
+
+
+
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(10, 430, 75, 23))
+        self.pushButton.setObjectName("pushButton")
+
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.retranslateUi(MainWindow)
+
+        self.speedSlider.valueChanged['int'].connect(self.lcdSPEED.display) # type: ignore
+        self.servoSlider.valueChanged['int'].connect(self.lcdSPEED_2.display) # type: ignore
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.ledC.setText(_translate("MainWindow", "CheckBox"))
+        self.openB.setText(_translate("MainWindow", "openB"))
+        self.closeB.setText(_translate("MainWindow", "closeB"))
+        self.resetB.setText(_translate("MainWindow", "resetB"))
+        self.pushButton.setText(_translate("MainWindow", "PushButton"))
+
+
+    def onReset(self):
+        portlist = []
+        ports = QSerialPortInfo().availablePorts()
+        for port in ports:
+            portlist.append(port.portName())
+            self.comL.clear()
+            self.comL.addItems(portlist)
+    def onOpen(self):
+        self.serial.setPortName(self.comL.currentText())
+        self.serial.open(QIODevice.ReadWrite)
+    def onClose(self):
+        self.serial.close()
+
+    def onRead(self):
+        if not self.serial.canReadLine():
+            return
+        rx = self.serial.readLine()
+        rxs = str(rx, 'utf-8').strip()
+        data = rxs.split(',')
+        if data[0] == '0':
+            self.temperaturL01.display(data[1])
+            self.temperaturL02.display(data[2])
+    def serialSend(self, data):
+        txs = ""
+        for val in data:
+            txs += str(val)
+            txs += ','
+        txs = txs[:-1]
+        txs += ';'
+        self.serial.write(txs.encode())
+    def ledControl(self, val):
+        if val == 2: val = 1;
+        self.serialSend([0, val])
+    def defSpeed(self, val):
+        self.serialSend([1, self.speedSlider.value()])
+        print(val)
+    def defServo(self, val):
+        self.serialSend([2, self.servoSlider.value()])
+        print(val)
+
+    def ImageUpdateSlot(self, Image):
+        self.QTcamera.setPixmap(QPixmap.fromImage(Image))
+
+class Worker1(QThread):
+    ImageUpdate = pyqtSignal(QImage)
+    def run(self):
+        self.ThreadActive = True
+        Capture = cv2.VideoCapture(0)
+        while self.ThreadActive:
+            ret, frame = Capture.read()
+            if ret:
+                Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                FlippedImage = cv2.flip(Image, 1)
+                ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+                Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+                self.ImageUpdate.emit(Pic)
+    def stop(self):
+        self.ThreadActive = False
+        self.quit()
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
+
+
+
+#___
+
+#--------------
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'C:\Users\amire\PycharmProjects\QTARDPYT\QTdes.ui'
+#
+# Created by: PyQt5 UI code generator 5.15.9
+#
+# WARNING: Any manual changes made to this file will be lost when pyuic5 is
+# run again.  Do not edit this file unless you know what you are doing.
+
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+import cv2
+from PyQt5.QtSerialPort import QSerialPort, QSerialPortInfo
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(976, 646)
+        MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        MainWindow.setStyleSheet("QMainWindow{\n"
+"background-color:#455364;\n"
+"}")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+
+
+
+
+
+        self.speedSlider = QtWidgets.QSlider(self.centralwidget)
+        self.speedSlider.setGeometry(QtCore.QRect(560, 550, 371, 51))
+        self.speedSlider.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.speedSlider.setStyleSheet("\n"
+"QSlider::groove:horizontal { background: white; position: absolute;  left: 10px; right: 10px;}\n"
+"QSlider::handle:horizontal {height: 10px; background: black;margin: 0 -10px; }\n"
+"QSlider::add-page:horizontal { background: white;}\n"
+"QSlider::sub-page:horizontal {background: red;}")
+        self.speedSlider.setMinimum(800)
+        self.speedSlider.setMaximum(2300)
+        self.speedSlider.setProperty("value", 1550)
+        self.speedSlider.setSliderPosition(1550)
+        self.speedSlider.setTracking(True)
+        self.speedSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.speedSlider.setObjectName("speedSlider")
+        self.speedSlider.valueChanged.connect(self.defSpeed)
+
+
+        self.lcdSPEED = QtWidgets.QLCDNumber(self.centralwidget)
+        self.lcdSPEED.setGeometry(QtCore.QRect(930, 550, 81, 51))
+        self.lcdSPEED.setObjectName("lcdSPEED")
+
+        self.servoSlider = QtWidgets.QSlider(self.centralwidget)
+        self.servoSlider.setGeometry(QtCore.QRect(20, 550, 301, 51))
+        self.servoSlider.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+        self.servoSlider.setStyleSheet("\n"
+"QSlider::groove:horizontal {background: white; position: absolute; left: 10px; right: 10px;}\n"
+"QSlider::handle:horizontal {height: 10px; background: black; margin: 0 -10px; /* расширяется наружу от бороздки */ }\n"
+"QSlider::add-page:horizontal {background: white;}\n"
+"QSlider::sub-page:horizontal {background: white;}")
+        self.servoSlider.setMinimum(0)
+        self.servoSlider.setMaximum(180)
+        self.servoSlider.setProperty("value", 90)
+        self.servoSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.servoSlider.setObjectName("servoSlider")
+        self.servoSlider.valueChanged.connect(self.defServo)
+
+
+        self.temperaturL01 = QtWidgets.QLCDNumber(self.centralwidget)
+        self.temperaturL01.setGeometry(QtCore.QRect(10, 180, 211, 101))
+        self.temperaturL01.setStyleSheet("\n"
+"QLCDNumber{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.0284091 rgba(255, 0, 79, 255), stop:1 rgba(255, 124, 55, 252)); color: rgb(255, 255, 255);}")
+        self.temperaturL01.setObjectName("temperaturL01")
+
+        self.ledC = QtWidgets.QCheckBox(self.centralwidget)
+        self.ledC.setGeometry(QtCore.QRect(10, 380, 71, 41))
+        self.ledC.setObjectName("ledC")
+        self.ledC.stateChanged.connect(self.ledControl)
+
+        self.temperaturL02 = QtWidgets.QLCDNumber(self.centralwidget)
+        self.temperaturL02.setGeometry(QtCore.QRect(10, 280, 211, 101))
+        self.temperaturL02.setStyleSheet("\n"
+"QLCDNumber{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.0284091 rgba(255, 0, 79, 255), stop:1 rgba(255, 124, 55, 252)); color: rgb(255, 255, 255);}")
+        self.temperaturL02.setObjectName("temperaturL02")
+
+        self.lcdSPEED_2 = QtWidgets.QLCDNumber(self.centralwidget)
+        self.lcdSPEED_2.setGeometry(QtCore.QRect(350, 550, 81, 51))
+        self.lcdSPEED_2.setObjectName("lcdSPEED_2")
+
+        self.openB = QtWidgets.QPushButton(self.centralwidget)
+        self.openB.setGeometry(QtCore.QRect(10, 80, 101, 41))
+        self.openB.setObjectName("openB")
+        self.openB.clicked.connect(self.onOpen)
+
+        self.closeB = QtWidgets.QPushButton(self.centralwidget)
+        self.closeB.setGeometry(QtCore.QRect(110, 80, 81, 41))
+        self.closeB.setObjectName("closeB")
+        self.closeB.clicked.connect(self.onClose)
+
+
+
+
+        self.serial = QSerialPort()
+        self.serial.setBaudRate(115200)
+        portList = []
+        ports = QSerialPortInfo().availablePorts()
+        for port in ports:
+            portList.append(port.portName())
+
+        self.comL = QtWidgets.QComboBox(self.centralwidget)
+        self.comL.setGeometry(QtCore.QRect(10, 10, 181, 61))
+        self.comL.setObjectName("comL")
+        self.comL.addItems(portList)
+
+
+        self.resetB = QtWidgets.QPushButton(self.centralwidget)
+        self.resetB.setGeometry(QtCore.QRect(10, 130, 181, 41))
+        self.resetB.setObjectName("resetB")
+        self.resetB.clicked.connect(self.onReset)
+
+        self.QTcamera = QtWidgets.QLabel(self.centralwidget)
+        self.QTcamera.setGeometry(QtCore.QRect(230, 20, 721, 501))
+        self.QTcamera.setObjectName("QTcamera")
+
+        self.Worker1 = Worker1()
+        self.Worker1.start()
+        self.Worker1.ImageUpdate.connect(self.ImageUpdateSlot)
+
+
+
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(10, 430, 75, 23))
+        self.pushButton.setObjectName("pushButton")
+
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.retranslateUi(MainWindow)
+
+        self.speedSlider.valueChanged['int'].connect(self.lcdSPEED.display) # type: ignore
+        self.servoSlider.valueChanged['int'].connect(self.lcdSPEED_2.display) # type: ignore
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.ledC.setText(_translate("MainWindow", "CheckBox"))
+        self.openB.setText(_translate("MainWindow", "openB"))
+        self.closeB.setText(_translate("MainWindow", "closeB"))
+        self.resetB.setText(_translate("MainWindow", "resetB"))
+        self.pushButton.setText(_translate("MainWindow", "PushButton"))
+
+
+    def onReset(self):
+        portlist = []
+        ports = QSerialPortInfo().availablePorts()
+        for port in ports:
+            portlist.append(port.portName())
+            self.comL.clear()
+            self.comL.addItems(portlist)
+    def onOpen(self):
+        self.serial.setPortName(self.comL.currentText())
+        self.serial.open(QIODevice.ReadWrite)
+    def onClose(self):
+        self.serial.close()
+
+    def onRead(self):
+        if not self.serial.canReadLine():
+            return
+        rx = self.serial.readLine()
+        rxs = str(rx, 'utf-8').strip()
+        data = rxs.split(',')
+        if data[0] == '0':
+            self.temperaturL01.display(data[1])
+            self.temperaturL02.display(data[2])
+    def serialSend(self, data):
+        txs = ""
+        for val in data:
+            txs += str(val)
+            txs += ','
+        txs = txs[:-1]
+        txs += ';'
+        self.serial.write(txs.encode())
+    def ledControl(self, val):
+        if val == 2: val = 1;
+        self.serialSend([0, val])
+    def defSpeed(self, val):
+        self.serialSend([1, self.speedSlider.value()])
+        print(val)
+    def defServo(self, val):
+        self.serialSend([2, self.servoSlider.value()])
+        print(val)
+
+    def ImageUpdateSlot(self, Image):
+        self.QTcamera.setPixmap(QPixmap.fromImage(Image))
+
+class Worker1(QThread):
+    ImageUpdate = pyqtSignal(QImage)
+    def run(self):
+        self.ThreadActive = True
+        Capture = cv2.VideoCapture(0)
+        while self.ThreadActive:
+            ret, frame = Capture.read()
+            if ret:
+                Image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                FlippedImage = cv2.flip(Image, 1)
+                ConvertToQtFormat = QImage(FlippedImage.data, FlippedImage.shape[1], FlippedImage.shape[0], QImage.Format_RGB888)
+                Pic = ConvertToQtFormat.scaled(640, 480, Qt.KeepAspectRatio)
+                self.ImageUpdate.emit(Pic)
+    def stop(self):
+        self.ThreadActive = False
+        self.quit()
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
