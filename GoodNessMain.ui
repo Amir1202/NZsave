@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1081</width>
+    <height>665</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="QTcamera">
+        <property name="styleSheet">
+         <string notr="true">
+QLabel{
+border: 2px solid rgb(0, 85, 127);
+border-radius: 4px;
+padding: 2px;
+background-color:rgb(37, 37, 56);
+color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.00568182 rgba(255, 194, 0, 255), stop:1 rgba(255, 238, 97, 252));
+font: 16pt &quot;Impact&quot;;
+}</string>
+        </property>
+        <property name="text">
+         <string>Загрузка...</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinAndMaxSize</enum>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <item>
+           <widget class="QLCDNumber" name="lcdNumber_8">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>1200</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">
+QLCDNumber{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0,
+stop:0.0284091 rgba(255, 0, 79, 255), stop:1 rgba(255, 124, 55, 252)); color: rgb(255, 255, 255);}</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="rightMargin">
+             <number>10</number>
+            </property>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_3">
+              <item>
+               <widget class="QRadioButton" name="QR_Forward">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>13</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border-color: rgb(85, 255, 0);</string>
+                </property>
+                <property name="text">
+                 <string>Вперёд</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="QR_Stop">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>13</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>СТОП</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="QR_Back">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>13</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Назад</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QSlider" name="speedSlider">
+              <property name="styleSheet">
+               <string notr="true">QSlider::groove:vertical { background: blue; position: absolute; left: 0px; right: 0px; border-radius: 4px;}
+QSlider::handle:vertical {
+background:#880000;
+width: 12px;
+margin: -10px -10px;
+}
+QSlider::add-page:vertical { background: red;}
+QSlider::sub-page:vertical {background: white;}</string>
+              </property>
+              <property name="minimum">
+               <number>800</number>
+              </property>
+              <property name="maximum">
+               <number>1700</number>
+              </property>
+              <property name="pageStep">
+               <number>1</number>
+              </property>
+              <property name="value">
+               <number>1450</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="tickPosition">
+               <enum>QSlider::TicksBelow</enum>
+              </property>
+              <property name="tickInterval">
+               <number>100</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="topMargin">
+       <number>30</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QSlider" name="servoSlider">
+          <property name="styleSheet">
+           <string notr="true">
+QSlider::groove:horizontal {background: white; position: absolute; left: 10px; right: 10px;}
+QSlider::handle:horizontal {height: 10px; background: black; margin: 0 -10px; /* расширяется наружу от бороздки */ }</string>
+          </property>
+          <property name="maximum">
+           <number>180</number>
+          </property>
+          <property name="pageStep">
+           <number>1</number>
+          </property>
+          <property name="sliderPosition">
+           <number>90</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>30</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
+           <number>30</number>
+          </property>
+          <item>
+           <widget class="QLCDNumber" name="lcdNumber_7">
+            <property name="styleSheet">
+             <string notr="true">
+QLCDNumber{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0,
+stop:0.0284091 rgba(255, 0, 79, 255), stop:1 rgba(255, 124, 55, 252)); color: rgb(255, 255, 255);}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QComboBox" name="comL">
+          <property name="maximumSize">
+           <size>
+            <width>60</width>
+            <height>20</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="ledC">
+          <property name="maximumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QLabel" name="TextTemp">
+          <property name="styleSheet">
+           <string notr="true">
+font: 8pt &quot;Portico Light&quot;;
+color: rgb(0, 85, 255);</string>
+          </property>
+          <property name="text">
+           <string>Температура</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="temperaturL01"/>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="temperaturL02"/>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="temperaturL03"/>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QLabel" name="TextBLara">
+          <property name="styleSheet">
+           <string notr="true">
+font: 8pt &quot;Portico Light&quot;;
+color: rgb(0, 85, 255);</string>
+          </property>
+          <property name="text">
+           <string>Влажность</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="wetL01"/>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="wetL02"/>
+        </item>
+        <item>
+         <widget class="QLCDNumber" name="wetL03"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1081</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSetting">
+    <property name="title">
+     <string>Setting</string>
+    </property>
+    <widget class="QMenu" name="menuPortList">
+     <property name="title">
+      <string>PortList</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
+    <addaction name="menuPortList"/>
+    <addaction name="actionOpenPort"/>
+    <addaction name="actionClosePort"/>
+    <addaction name="separator"/>
+    <addaction name="actionReset"/>
+   </widget>
+   <addaction name="menuSetting"/>
+  </widget>
+  <action name="actionOpenPort">
+   <property name="text">
+    <string>OpenPort</string>
+   </property>
+  </action>
+  <action name="actionClosePort">
+   <property name="text">
+    <string>ClosePort</string>
+   </property>
+  </action>
+  <action name="actionReset">
+   <property name="text">
+    <string>Reset</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>servoSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lcdNumber_7</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>484</x>
+     <y>600</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>876</x>
+     <y>603</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>speedSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lcdNumber_8</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>562</x>
+     <y>126</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>748</x>
+     <y>33</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
