@@ -30,7 +30,6 @@ void loop() {
   parsing();
   Datch();
 }
-
 void Datch() {
   static uint32_t tmr = 0;
   if (millis() - tmr > 800) {
@@ -44,6 +43,7 @@ void Datch() {
     dsLittle.requestTemp();  //ЗапросТемпературы2.
     dsLittle.readTemp();     //Читаем, если прочитано - выводим.
     Serial.print(dsLittle.getTemp());
+
     Serial.print(',');
     Serial.println("1000");
   }
@@ -63,6 +63,15 @@ void parsing() {
         break;
       case 2:
         SER.write(ints[1]);
+        break;
+      case 3:
+        ESC.write(1600);            //Максимум вперёд!
+        break;
+      case 4:
+        ESC.write(1450);            //СТОП!
+        break;
+      case 5:
+        ESC.write(1360);            //Максимум назад!
         break;
     }
   }
